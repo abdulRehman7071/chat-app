@@ -8,11 +8,7 @@ import { baseURL } from "../../utils/constsnts";
 import { UserContextProvider, UserContext } from "@/utils/userContext";
 import Image from "next/image";
 const Login = () => {
-  return (
-    <UserContextProvider>
-      <LoginForm />
-    </UserContextProvider>
-  );
+  return <LoginForm />;
 };
 
 export default Login;
@@ -31,7 +27,7 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
   // const [loggedIn, setLoggedIn] = useState(false);
-  const { setLoggedInUser, setId, id, loggedInUser } = useContext(UserContext);
+  // const { setLoggedInUser, setId, id, loggedInUser } = useContext(UserContext);
   const router = useRouter();
 
   const handleShowPassWord = (e) => {
@@ -50,12 +46,13 @@ const LoginForm = () => {
         userName,
         password,
       });
+      const { token, user } = data;
       console.log("🚀 ~ file: page.js:41 ~ data:", data);
-      if (data && data.token) {
-        setLoggedInUser(data.userName);
-        setId(data.token);
+      if (token) {
         router.push("/");
-        document.cookie = `chatApp=${data.token}`;
+        document.cookie = `chatApp=${token}`;
+        document.cookie = `user=${user._id}`;
+        document.cookie = `userName=${user.userName}`;
       } else if (data.validationError) {
         setLoginError(data.validationError);
         setTimeout(() => {

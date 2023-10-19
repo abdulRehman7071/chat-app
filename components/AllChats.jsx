@@ -1,7 +1,27 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { baseURL } from "@/utils/constsnts";
+
+import ChatUser from "./ChatUser";
 
 const AllChats = () => {
+  const [allChats, setAllChats] = useState([]);
+  console.log("hi");
+  const getAllChatList = async () => {
+    try {
+      const id = document.cookie.split(";")[1].split("=")[1];
+      const { data } = await axios.get(`${baseURL}/chat/${id}`);
+      setAllChats(data);
+      console.log("🚀 ~ file: AllChats.jsx:15 ~ data:", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAllChatList();
+  }, []);
   return (
     <div className=" w-1/3 h-full border-r border-dashed border-white px-4 min-h-screen py-4">
       <div className="chat-head mx-auto flex justify-between items-center ">
@@ -17,56 +37,9 @@ const AllChats = () => {
         </div>
       </div>
       <div className="chat-body">
-        <div className="flex justify-between px-2 py-4 mb-4items-center cursor-pointer hover:bg-primary hover:text-white rounded transition-all ease-in-out delay-50">
-          <div className="w-1/4">
-            <div className="avatar indicator">
-              <span className="indicator-item badge badge-secondary bg-secondry text-base-200 font-xs border-secondry">
-                typing…
-              </span>
-              <div className="h-12 w-12 rounded-lg">
-                <Image
-                  src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                  className="rounded-lg"
-                  alt="User avatar"
-                  height={36}
-                  width={36}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="w-1/2">
-            <h3 className="font-bold font-sans text-sm">Lorem, ipsum dolor.</h3>
-            <p className="text-xs opacity-40">Lorem ipsum dolor sit amet.</p>
-          </div>
-          <div className="text-xs opacity-60 self-end w-1/4 text-end">
-            12:04 am
-          </div>
-        </div>
-        <div className="flex justify-between px-2 py-4 mb-4items-center cursor-pointer hover:bg-primary hover:text-white rounded transition-all ease-in-out delay-50">
-          <div className="w-1/4">
-            <div className="avatar indicator">
-              <span className="indicator-item badge badge-secondary bg-secondry text-base-200 font-xs border-secondry">
-                typing…
-              </span>
-              <div className="h-12 w-12 rounded-lg">
-                <Image
-                  src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                  className="rounded-lg"
-                  alt="User avatar"
-                  height={36}
-                  width={36}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="w-1/2">
-            <h3 className="font-bold font-sans text-sm">Lorem, ipsum dolor.</h3>
-            <p className="text-xs opacity-40">Lorem ipsum dolor sit amet.</p>
-          </div>
-          <div className="text-xs opacity-60 self-end w-1/4 text-end">
-            12:04 am
-          </div>
-        </div>
+        {allChats.map((chat, i) => (
+          <ChatUser key={i} chat={chat} />
+        ))}
       </div>
     </div>
   );

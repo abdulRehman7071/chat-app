@@ -5,15 +5,10 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 import { baseURL } from "../../utils/constsnts";
-import { UserContextProvider, UserContext } from "@/utils/userContext";
 import Image from "next/image";
 
 const Register = () => {
-  return (
-    <UserContextProvider>
-      <RegisterForm />
-    </UserContextProvider>
-  );
+  return <RegisterForm />;
 };
 
 const RegisterForm = () => {
@@ -22,7 +17,7 @@ const RegisterForm = () => {
   const [showToken, setShowToken] = useState(false);
   const [loginMessage, setLoginMessage] = useState("");
   const [loginError, setLoginError] = useState("");
-  const { setLoggedInUser, setId, id, loggedInUser } = useContext(UserContext);
+  // const { setLoggedInUser, setId, id, loggedInUser } = useContext(UserContext);
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassWord = (e) => {
@@ -41,7 +36,6 @@ const RegisterForm = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("🚀 ~ file: page.jsx:27 ~ loggedInUser:", loggedInUser);
     try {
       if (userName.value === "") {
         return;
@@ -55,8 +49,8 @@ const RegisterForm = () => {
         password,
       });
       if (data && data.message) {
-        setLoggedInUser(data.userName);
-        setId(data.token);
+        // setLoggedInUser(data.userName);
+        // setId(data.token);
         setShowToken(true);
         setLoginMessage(data.message);
         // setTimeout(() => {

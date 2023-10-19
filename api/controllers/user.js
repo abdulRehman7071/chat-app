@@ -60,7 +60,7 @@ const userController = {
       );
 
       res.cookie("chatApp", token);
-      res.status(200).json({ message: "Logged In Successfully", token });
+      res.status(200).json({ message: "Logged In Successfully", token, user });
     } catch (error) {
       console.error("Error:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -69,10 +69,11 @@ const userController = {
 
   async getProfile(req, res) {
     try {
-      const token = req.Cookie;
-      console.log("🚀 ~ file: user.js:29 ~ token:", token);
-      const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-      const user = await userSchema.findById(decoded._id);
+      const { id } = req.params;
+      // const token = req.Cookie;
+      // console.log("🚀 ~ file: user.js:29 ~ token:", token);
+      // const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+      const user = await userSchema.findById(id);
       console.log("🚀 ~ file: user.js:31 ~ user:", user);
       res.json({ user });
     } catch (error) {
