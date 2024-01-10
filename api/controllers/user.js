@@ -80,6 +80,16 @@ const userController = {
       res.json({ error });
     }
   },
+
+  async getAllUser(req, res) {
+    try {
+      const user = await userSchema.find({}, { userName: 1 });
+
+      res.json({ user });
+    } catch (error) {
+      res.json({ error });
+    }
+  },
 };
 
 module.exports = userController;

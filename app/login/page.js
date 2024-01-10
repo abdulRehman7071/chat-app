@@ -3,10 +3,11 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
 
 import { baseURL } from "../../utils/constsnts";
-import { UserContextProvider, UserContext } from "@/utils/userContext";
 import Image from "next/image";
+import { login } from "@/store/user.js";
 const Login = () => {
   return <LoginForm />;
 };
@@ -26,10 +27,9 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
-  // const [loggedIn, setLoggedIn] = useState(false);
-  // const { setLoggedInUser, setId, id, loggedInUser } = useContext(UserContext);
-  const router = useRouter();
 
+  const router = useRouter();
+  const dispatch = useDispatch();
   const handleShowPassWord = (e) => {
     e.preventDefault();
 
@@ -49,9 +49,10 @@ const LoginForm = () => {
       const { token, user } = data;
       console.log("🚀 ~ file: page.js:41 ~ data:", data);
       if (token) {
-        router.push("/");
         document.cookie = `chatApp=${token}`;
-        document.cookie = `user=${user._id}`;
+        dispatch(login(user));
+        router.push("/");
+        // document.cookie = `user=${user._id}`;
         document.cookie = `userName=${user.userName}`;
       } else if (data.validationError) {
         setLoginError(data.validationError);

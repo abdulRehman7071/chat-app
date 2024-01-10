@@ -2,27 +2,23 @@ import { baseURL } from "@/utils/constsnts";
 import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setReciver } from "@/store/user";
 
-const ChatUser = ({ chat }) => {
-  const [user, setUser] = useState([]);
-  const fetchChat = async () => {
-    try {
-      const id = document.cookie.split(";")[1].split("=")[1];
+const ChatUser = ({ user }) => {
+  const id = document.cookie.split(";")[1].split("=")[1];
 
-      const userId = chat.members.find((index) => index !== id);
-      const { data } = await axios.get(`${baseURL}/user/profile/${userId}`);
-      setUser(data.user);
-      console.log("🚀 ~ file: ChatUser.jsx:12 ~ data:", data);
-    } catch (error) {
-      console.log(error);
-    }
+  const dispatch = useDispatch();
+  const handleClick = (user) => {
+    console.log("Reciver", user);
+    dispatch(setReciver(user));
   };
   useEffect(() => {
-    fetchChat();
+    // fetchChat();
   }, []);
 
   return (
-    <div>
+    <div onClick={() => handleClick(user)}>
       <div className="flex justify-between px-2 py-4 mb-4items-center cursor-pointer hover:bg-primary hover:text-white rounded transition-all ease-in-out delay-50">
         <div className="w-1/4">
           <div className="avatar indicator">
@@ -41,7 +37,9 @@ const ChatUser = ({ chat }) => {
           </div>
         </div>
         <div className="w-1/2">
-          <h3 className="font-bold font-sans text-sm">{user.userName}</h3>
+          <h3 className="font-bold font-sans text-sm">
+            {user.userName} {user._id === id && "(You)"}
+          </h3>
           <p className="text-xs opacity-40">Lorem ipsum dolor sit amet.</p>
         </div>
         <div className="text-xs opacity-60 self-end w-1/4 text-end">

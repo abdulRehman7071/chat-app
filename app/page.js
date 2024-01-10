@@ -9,10 +9,9 @@ import Chat from "@/components/Chat";
 export default function Home() {
   const cookieStore = cookies();
 
-  const isToken = cookieStore.get("chatApp");
-  const user = cookieStore.get("user");
-  console.log("🚀 ~ file: page.js:14 ~ user:", user);
-  if (!isToken) {
+  const token = cookieStore.get("chatApp");
+  const user = cookieStore.get("userName");
+  if (!token) {
     redirect("/login");
   }
   if (!user) {
